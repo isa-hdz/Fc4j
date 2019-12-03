@@ -3,12 +3,78 @@
  */
 package AIMA;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import facebook4j.Facebook;
+import facebook4j.FacebookException;
+import facebook4j.FacebookFactory;
+import facebook4j.User;
+
 public class App {
+    private static final Logger logger = LogManager.getLogger(App.class);
+
     public String getGreeting() {
         return "Hello world.";
     }
 
+    static Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+
+        Facebook facebook = new FacebookFactory().getInstance();
+
+        User me = null;
+        try {
+            me = facebook.getMe();
+        } catch (FacebookException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(" ");
+        System.out.println("Bienvenido: ");
+        
+        logger.error(me.getId());
+        logger.error(me.getName());
+        logger.error(me.getEmail());
+
+        int opcion; //Guardaremos la opcion del usuario
+ 
+        while (!salir) {
+ 
+            System.out.println("1. Obtener las publicaciones en el newsfeed");
+            System.out.println("2. Obtener las publicaciones del home");
+            System.out.println("3. Publicar un post");
+            System.out.println("4. Salir");
+ 
+            try {
+ 
+                System.out.println("Elige una opción");
+                opcion = sn.nextInt();
+ 
+                switch (opcion) {
+                    case 1:
+                        logger.error(facebook.getFeed());
+                        break;
+                    case 2:
+                        logger.error(facebook.getHome());
+                        break;
+                    case 3:
+                    logger.error(facebook.postStatusMessage("Hello World."));
+                        break;
+                    case 4:
+                        salir = true;
+                        break;
+                    default:
+                        System.out.println("Solo números entre 1 y 4");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Debes insertar un número");
+                sn.next();
+            }
+        }
+ 
     }
+ 
 }
+ }
